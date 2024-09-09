@@ -1,4 +1,4 @@
-package com.example.istore
+package com.tnitsiri.istore
 
 import io.flutter.embedding.android.FlutterActivity
 
