@@ -1,5 +1,7 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:istore/models/product.model.dart';
+import 'package:istore/modules/product/component/detail.dart';
 
 class ProductCardComponent extends StatefulWidget {
   final ProductModel product;
@@ -17,6 +19,21 @@ class ProductCardComponent extends StatefulWidget {
 }
 
 class _ProductCardComponentState extends State<ProductCardComponent> {
+  // ANCHOR View
+  void _view() {
+    showDialog(
+      context: context,
+      barrierColor: Colors.black38,
+      builder: (
+        BuildContext context,
+      ) {
+        return ProductDetailComponent(
+          product: widget.product,
+        );
+      },
+    );
+  }
+
   // ANCHOR Build
   @override
   Widget build(
@@ -106,7 +123,7 @@ class _ProductCardComponentState extends State<ProductCardComponent> {
       borderRadius: BorderRadius.circular(
         12,
       ),
-      onPressed: () {},
+      onPressed: _view,
       child: Container(
         decoration: BoxDecoration(
           color: CupertinoColors.white,
