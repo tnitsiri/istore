@@ -3,10 +3,12 @@ import 'package:istore/models/department.model.dart';
 
 class DepartmentCardComponent extends StatelessWidget {
   final DepartmentModel department;
+  final VoidCallback onPressed;
 
   const DepartmentCardComponent({
     super.key,
     required this.department,
+    required this.onPressed,
   });
 
   // ANCHOR Build
@@ -29,7 +31,7 @@ class DepartmentCardComponent extends StatelessWidget {
                 borderRadius: BorderRadius.circular(
                   12,
                 ),
-                onPressed: () {},
+                onPressed: onPressed,
                 child: Stack(
                   children: [
                     LayoutBuilder(

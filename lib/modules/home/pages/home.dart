@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:istore/models/department.model.dart';
 import 'package:istore/modules/department/component/card.dart';
 import 'package:istore/modules/department/component/placeholder.dart';
+import 'package:istore/modules/product/component/list.dart';
 import 'package:istore/services/api.service.dart';
 import 'package:istore/services/notify.service.dart';
 import 'package:provider/provider.dart';
@@ -22,10 +23,14 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   // ANCHOR State
+  final Map<String, GlobalKey<ProductListComponentState>> _productListKeys = {};
+
   late ApiService _apiService;
 
   List<DepartmentModel> _departments = [];
   bool _isFetching = true;
+
+  DepartmentModel? _department;
 
   // ANCHOR Fetch departments
   Future<bool> _fetchDepartments() async {
@@ -78,7 +83,18 @@ class _HomePageState extends State<HomePage> {
 
   // ANCHOR On refresh
   Future<void> _onRefresh() async {
-    await _fetchDepartments();
+    bool fetchDepartments = await _fetchDepartments();
+
+    if (!fetchDepartments) {
+      return;
+    }
+
+    if (_department != null) {
+      if (_productListKeys[_department!.id] != null &&
+          _productListKeys[_department!.id]!.currentState != null) {
+        await _productListKeys[_department!.id]!.currentState!.refetch();
+      }
+    }
   }
 
   // ANCHOR Providers
@@ -137,6 +153,18 @@ class _HomePageState extends State<HomePage> {
                         department.id,
                       ),
                       department: department,
+                      onPressed: () {
+                        if (mounted) {
+                          setState(() {
+                            if (_productListKeys[department.id] == null) {
+                              _productListKeys[department.id] =
+                                  GlobalKey<ProductListComponentState>();
+                            }
+
+                            _department = department;
+                          });
+                        }
+                      },
                     );
                   },
                 ),
@@ -162,6 +190,30 @@ class _HomePageState extends State<HomePage> {
                   },
                 ).toList(),
               ),
+            ),
+          ],
+          if (_department != null) ...[
+            SliverToBoxAdapter(
+              child: Container(
+                margin: const EdgeInsets.only(
+                  top: 5,
+                ),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 12,
+                ),
+                child: Text(
+                  'Product list : ${_department!.name}',
+                  style: const TextStyle(
+                    fontSize: 23,
+                    fontWeight: FontWeight.w600,
+                    letterSpacing: 0.3,
+                  ),
+                ),
+              ),
+            ),
+            ProductListComponent(
+              key: _productListKeys[_department!.id],
+              department: _department!,
             ),
           ],
         ],
