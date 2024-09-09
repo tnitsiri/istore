@@ -97,7 +97,7 @@ class ProductListComponentState extends State<ProductListComponent> {
   @override
   void initState() {
     _providers();
-    // _fetch();
+    _fetch();
 
     super.initState();
   }

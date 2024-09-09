@@ -81,7 +81,7 @@ class _ProductCardComponentState extends State<ProductCardComponent> {
         ),
         Container(
           padding: const EdgeInsets.only(
-            top: 2,
+            top: 1,
             bottom: 9,
             left: 10,
             right: 10,
