@@ -13,7 +13,7 @@ class ApiService {
   // ANCHOR Init
   void _init() {
     BaseOptions options = BaseOptions(
-      baseUrl: '${dotenv.env[EnvKeyEnum.apiUrl.name] as String}/',
+      baseUrl: dotenv.env[EnvKeyEnum.apiUrl.key()] as String,
       connectTimeout: const Duration(
         seconds: 15,
       ),
