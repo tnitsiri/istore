@@ -39,6 +39,8 @@ dependencies:
   json_annotation: ^4.9.0
   toast: ^0.3.0
   recase: ^4.1.0
+  carousel_slider: ^5.0.0
+  fade_shimmer: ^2.2.0
 
 dev_dependencies:
   flutter_test:

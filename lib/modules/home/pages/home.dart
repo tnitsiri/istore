@@ -1,6 +1,9 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:istore/models/department.model.dart';
+import 'package:istore/modules/department/component/card.dart';
+import 'package:istore/modules/department/component/placeholder.dart';
 import 'package:istore/services/api.service.dart';
 import 'package:istore/services/notify.service.dart';
 import 'package:provider/provider.dart';
@@ -112,12 +115,55 @@ class _HomePageState extends State<HomePage> {
             CupertinoSliverRefreshControl(
               onRefresh: _onRefresh,
             ),
-          ],
-          SliverToBoxAdapter(
-            child: Text(
-              'Number of departnebts: ${_departments.length}',
+            if (_departments.isNotEmpty) ...[
+              SliverToBoxAdapter(
+                child: CarouselSlider.builder(
+                  options: CarouselOptions(
+                    viewportFraction: 0.4,
+                    padEnds: false,
+                    enableInfiniteScroll: false,
+                    height: (MediaQuery.of(context).size.width / 2) - 20,
+                  ),
+                  itemCount: _departments.length,
+                  itemBuilder: (
+                    BuildContext context,
+                    int itemIndex,
+                    int pageViewIndex,
+                  ) {
+                    DepartmentModel department = _departments[itemIndex];
+
+                    return DepartmentCardComponent(
+                      key: ValueKey(
+                        department.id,
+                      ),
+                      department: department,
+                    );
+                  },
+                ),
+              ),
+            ],
+          ] else ...[
+            SliverToBoxAdapter(
+              child: CarouselSlider(
+                options: CarouselOptions(
+                  viewportFraction: 0.4,
+                  padEnds: false,
+                  enableInfiniteScroll: false,
+                  scrollPhysics: const NeverScrollableScrollPhysics(),
+                  height: (MediaQuery.of(context).size.width / 2) - 20,
+                ),
+                items: [1, 2, 3].map(
+                  (int index) {
+                    return DepartmentCardPlaceholderComponent(
+                      key: ValueKey(
+                        index,
+                      ),
+                    );
+                  },
+                ).toList(),
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );
